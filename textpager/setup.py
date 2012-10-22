@@ -6,7 +6,7 @@ setup_params = dict(
     packages=setuptools.find_packages(),
     entry_points=dict(
         pmxbot_handlers = [
-            'pmx_textpager = pmxbot_textpager',
+            'textpager = pmxbot_textpager',
         ]
     ),
     description="Deliver and email/text message to summon someone to an IRC room",

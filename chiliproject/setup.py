@@ -6,7 +6,7 @@ setup_params = dict(
     packages=setuptools.find_packages(),
     entry_points=dict(
         pmxbot_handlers = [
-            'pmx_chiliproject = pmxbot_chiliproject',
+            'chiliproject = pmxbot_chiliproject',
         ]
     ),
     description="report the status of a Chiliproject ticket",

@@ -6,7 +6,7 @@ setup_params = dict(
     packages=setuptools.find_packages(),
     entry_points=dict(
         pmxbot_handlers = [
-            'pmx_lart = pmxbot_lart',
+            'lart = pmxbot_lart',
         ]
     ),
     description="Luser Attitude Readjustment Tool",
