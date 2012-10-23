@@ -9,18 +9,16 @@ from pmxbot.core import command
 def dig(client, event, channel, nick, rest):
     if rest:
         record_types = ['A','CNAME','MX']
-        results = []
         for t in record_types:
-            rdata = dns.resolver.query(rest,t,raise_on_no_answer=False)
-            if type(rdata.rrset) == type(None):
-                continue
-            else:
-                results.append(rdata.rrset.to_text())
-        if len(results) == 0:
-            yield("No records found for: %s" % rest)
-        else:
-            for res in results:
-                yield(res)
+            try:
+                rdata = dns.resolver.query(rest,t)
+            except dns.resolver.NXDOMAIN:
+                    yield("Domain %s does not appear to exist" % rest)
+                    break
+            except dns.resolver.NoAnswer:
+                    yield("No %s records found for %s" % (t, rest))
+                    continue
+            yield(rdata.rrset.to_text())
     else:
         yield("You must specify a FQDN to query (without the protocol)")
 
