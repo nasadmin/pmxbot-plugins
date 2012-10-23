@@ -1,7 +1,7 @@
 import setuptools
 
 setup_params = dict(
-    name="pmxbot-dns",
+    name="pmxbot-dig",
     version = "0.1",
     packages=setuptools.find_packages(),
     entry_points=dict(
