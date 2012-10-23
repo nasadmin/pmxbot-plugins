@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import socket
 import dns.resolver
+import time
 
 import pmxbot
 from pmxbot.core import command
@@ -18,7 +19,9 @@ def dig(client, event, channel, nick, rest):
             except dns.resolver.NoAnswer:
                     yield("No %s records found for %s" % (t, rest))
                     continue
-            yield(rdata.rrset.to_text())
+            for entry in rdata.rrset.to_text().split('\n'):
+                print entry
+                yield(entry)
+                time.sleep(.5)
     else:
         yield("You must specify a FQDN to query (without the protocol)")
-
