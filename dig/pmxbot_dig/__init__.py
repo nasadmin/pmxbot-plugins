@@ -9,7 +9,7 @@ from pmxbot.core import command
 @command("dig", aliases=('host',), doc="query DNS records")
 def dig(client, event, channel, nick, rest):
     if rest:
-        record_types = ['A','CNAME','MX']
+        record_types = ['A','CNAME','MX','NS']
         for t in record_types:
             try:
                 rdata = dns.resolver.query(rest,t)
