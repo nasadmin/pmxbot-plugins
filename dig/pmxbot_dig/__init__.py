@@ -20,7 +20,6 @@ def dig(client, event, channel, nick, rest):
                     yield("No %s records found for %s" % (t, rest))
                     continue
             for entry in rdata.rrset.to_text().split('\n'):
-                print entry
                 yield(entry)
                 time.sleep(.5)
     else:
