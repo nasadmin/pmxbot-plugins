@@ -27,7 +27,6 @@ class SQLiteFactoid(Factoid, storage.SQLiteStorage):
     def get_factoid(self, key):
         query = "SELECT factoid FROM factoids WHERE key = ?"
         result = self.db.execute(query, [key]).fetchall()
-        print result[0][0]
         if len(result) > 0:
             return result[0][0]
         else:
@@ -37,6 +36,7 @@ class SQLiteFactoid(Factoid, storage.SQLiteStorage):
         query = "INSERT INTO factoids (key, factoid) values (?, ?)"
         try:
            self.db.execute(query, [key, factoid])
+           self.db.commit()
         except self.db.IntegrityError:
             currFactoid = self.get_factoid(key)
             return "But %s is already %s (perhaps try !factoid replace:)" % (key, currFactoid)
@@ -46,10 +46,21 @@ class SQLiteFactoid(Factoid, storage.SQLiteStorage):
         query = "INSERT OR REPLACE INTO factoids (key, factoid) values (?, ?)"
         try:
            self.db.execute(query, [key, factoid])
+           self.db.commit()
         except self.db.IntegrityError:
             factoid = self.get_factoid(key)
-            return "But %s is already %s (perhaps try !factoid replace:)" % (result[0], result[1])
+            return "I couldn't update the factoid for %s... sorry..." % key
         return "Factoid Added!"
+
+    def delete_factoid(self, key):
+        query = "DELETE FROM factoids WHERE key =?"
+        try:
+           self.db.execute(query, [key])
+           self.db.commit()
+        except self.db.IntegrityError:
+            factoid = self.get_factoid(key)
+            return "Couldn't delete factoid for %s (perhaps I didn't have one...)" % (result[0], result[1])
+        return "Factoid Deleted!"
 
 
 @command("factoid", aliases=("f",), doc='If passed with nothing then get a '
@@ -70,4 +81,10 @@ def FactoidCmd(client, event, channel, nick, rest):
         if m:
             return Factoid.store.update_factoid(m.group('key').strip(), m.group('factoid').strip())
         return "Sorry, I didn't quite catch that... try !factoid replace: something is something else"
+    if rest.startswith('delete: '):
+        cmdString = rest.split(' ', 1)[1]
+        if cmdString:
+           return Factoid.store.delete_factoid(cmdString)
+        else:
+           return "Sorry, I didn't quite catch that... try !factoid delete: something"
     return "%s is %s" % (rest, Factoid.store.get_factoid(rest))
