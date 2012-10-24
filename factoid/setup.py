@@ -2,7 +2,7 @@ import setuptools
 
 setup_params = dict(
     name="pmxbot-factoid",
-    version = "0.3",
+    version = "0.4",
     packages=setuptools.find_packages(),
     entry_points=dict(
         pmxbot_handlers = [
