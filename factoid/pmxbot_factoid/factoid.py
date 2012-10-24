@@ -31,7 +31,15 @@ class SQLiteFactoid(Factoid, storage.SQLiteStorage):
         if len(result) > 0:
             return result[0][0]
         else:
-            return "I don't have a factoid for %s" % key
+            return False
+
+    def get_random_factoid(self):
+        query = "SELECT key, factoid FROM factoids ORDER BY RANDOM() LIMIT 1;"
+        result = self.db.execute(query, [key]).fetchall()
+        if len(result) > 0:
+            return result[0][0], result[0][1]
+        else:
+            return False
 
     def set_factoid(self, key, factoid):
         query = "INSERT INTO factoids (key, factoid) values (?, ?)"
@@ -92,4 +100,15 @@ def FactoidCmd(client, event, channel, nick, rest):
     joiners = ['is','is probably','is, like,','was','could be','just might be']
     opener = random.sample(openers, 1)[0]
     joiner = random.sample(joiners, 1)[0]
-    return "%s %s %s %s" % (opener, rest, joiner, Factoid.store.get_factoid(rest))
+    if len(rest) > 0:
+        factoid = Factoid.store.get_factoid(rest)
+        if factoid:
+            return "%s %s %s %s" % (opener, rest, joiner, factoid)
+        else:
+            return "I don't have a factoid for %s" % key
+    else:
+        key, factoid = Factoid.store.get_random_factoid()
+        if factoid:
+            return "%s %s %s %s" % (opener, key, joiner, factoid)
+        else:
+            return "I don't have a factoid for %s" % key
