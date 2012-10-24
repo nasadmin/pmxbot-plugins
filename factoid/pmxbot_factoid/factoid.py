@@ -35,7 +35,7 @@ class SQLiteFactoid(Factoid, storage.SQLiteStorage):
 
     def get_random_factoid(self):
         query = "SELECT key, factoid FROM factoids ORDER BY RANDOM() LIMIT 1;"
-        result = self.db.execute(query, [key]).fetchall()
+        result = self.db.execute(query).fetchall()
         if len(result) > 0:
             return result[0][0], result[0][1]
         else:
