@@ -80,7 +80,7 @@ def FactoidCmd(client, event, channel, nick, rest):
     rest = rest.strip()
     if rest.startswith('add: '):
         cmdString = rest.split(' ', 1)[1]
-        m = re.match("(?P<key>.*) is (?P<factoid>.*)", cmdString)
+        m = re.match("(?P<key>.*?) is (?P<factoid>.*)", cmdString)
         if m:
             return Factoid.store.set_factoid(m.group('key').strip(), m.group('factoid').strip())
         return "Sorry, I didn't quite catch that... try !factoid add: something is something else"
