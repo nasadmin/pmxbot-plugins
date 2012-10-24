@@ -105,7 +105,7 @@ def FactoidCmd(client, event, channel, nick, rest):
         if factoid:
             return "%s %s %s %s" % (opener, rest, joiner, factoid)
         else:
-            return "I don't have a factoid for %s" % key
+            return "I don't have a factoid for %s" % rest
     else:
         key, factoid = Factoid.store.get_random_factoid()
         if factoid:
