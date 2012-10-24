@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 
 import re
+import random
 
 import pmxbot
 from pmxbot.core import command
@@ -87,4 +88,8 @@ def FactoidCmd(client, event, channel, nick, rest):
            return Factoid.store.delete_factoid(cmdString)
         else:
            return "Sorry, I didn't quite catch that... try !factoid delete: something"
-    return "%s is %s" % (rest, Factoid.store.get_factoid(rest))
+    openers = ['methinks','i heard','i guess','from memory,','hmm...','rumour has it,','it has been said that','somebody said','well,','extra, extra, read all about it,']
+    joiners = ['is','is probably','is, like,','was','could me','just might be']
+    opener = random.sample(openers, 1)[0]
+    joiner = random.sample(joiners, 1)[0]
+    return "%s %s %s %s" % (opener, rest, joiner, Factoid.store.get_factoid(rest))
